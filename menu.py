@@ -1,21 +1,22 @@
 import os 
+import os.path
 import getpass #used for hidden password
-import webserver
 import ui_design
-import docker
+import docker as dc
+import analytics
+import webserver
 #--------------------------------------------------------------------------------------
 #Header function
-
 def header():
 	ui_design.background(7)
 	ui_design.color(0)
-	print("                                                                     ",end=" ")
+	print("                                                                       ",end=" ")
 	print("        ")
 	print("------------------------------------------------",end="")
 	print("--------------------------------")
 	ui_design.blink_text()
 	ui_design.bold()
-	print("\t\t\t\tWELCOME TO ATUI")
+	print("                                  WELCOME TO ATUI                               ")
 	ui_design.reset()
 	ui_design.background(7)
 	ui_design.color(0)
@@ -53,7 +54,7 @@ def yum():
 	if(input()==1):
 		yum()
 #---------------------------------------------------------------------------------
-#Previous login
+#Previous login	
 def prevlogin():
 	os.system("clear")
 	header()	
@@ -63,53 +64,56 @@ def prevlogin():
 	ui_design.reset()
 	if(input()=='y' or input()=='Y'):
 		prevlogin()
-		else:
+	else:
 		return
 #---------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------	
 #main
-
-ui_design.color(3)
-entry=getpass.getpass()
-flag=0
-if(entry=="root"):
-	flag=1
-if(flag==0):
-	for i in range(3):
-		if(i==0):ui_design.color(2)
-		if(i==1):ui_design.color(3)
-		if(i==2):ui_design.color(1)
-		print("Enter the password again, Your have {} attempts left".format(3-i),end=" ") 
-		if(i==0):
-			print("\N{grinning face}")
-		elif(i==1):
-			print("\N{thinking face}")
-		else:
-			print("\N{face with thermometer}")
-		ui_design.color(3)		
-		entry=getpass.getpass()
-		if(entry=="root"):
-			flag=1
-			break
-if(flag==1):
-	ch=-1
-	while(True):
-		os.system("clear")
-		menu()
-		print("Enter your choice: ",end="")
-		ch=input()
-		if(ch=="1"):
-			yum()
-		if(ch=="2"):
-			webserver.main()
-		if(ch=="3"):
-			docker.main()
-		if(ch=="4"):
-			analytics()
-		elif(ch=="5"):
-			prevlogin()
-		else:
-			print("Enter correct choice")
-		os.system("clear")
-ui_design.reset()	
+def menu_main():
+	flag=0
+	ui_design.color(3)
+	entry=getpass.getpass()
+	if(entry=="root"):
+		flag=1
+	if(flag==0):
+		for i in range(3):
+			if(i==0):ui_design.color(2)
+			if(i==1):ui_design.color(3)
+			if(i==2):ui_design.color(1)
+			print("Enter the password again, Your have {} attempts left".format(3-i),end=" ") 
+			if(i==0):
+				print("\N{grinning face}")
+			elif(i==1):
+				print("\N{thinking face}")
+			else:
+				print("\N{face with thermometer}")
+			ui_design.color(3)		
+			entry=getpass.getpass()
+			if(entry=="root"):
+				flag=1
+				break
+	if(flag==1):
+		#f=open("login.txt","w+")	
+		ch=-1
+		while(True):
+			os.system("clear")
+			menu()
+			print("Enter your choice: ",end="")
+			ch=input()
+			if(ch=="1"):
+				yum()
+			if(ch=="2"):
+				webserver.webserver_main()
+			if(ch=="3"):
+				dc.docker_main()
+			if(ch=="4"):
+				analytics.menu_analytics()
+			elif(ch=="5"):
+				prevlogin()
+			else:
+				print("Enter correct choice")
+			os.system("clear")
+		#os.remove("login.txt")
+	ui_design.reset()
+menu_main()
 

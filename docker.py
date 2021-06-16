@@ -22,6 +22,7 @@ def requirement():
 	print("Required packages installed",end=" ")
 	print(u'\u2713\u2713')	
 	ui_design.reset()
+	time.sleep(4)
 #--------------------------------------------------------------------------
 def header():
 	temp=os.popen('stty size','r').read().split()
@@ -44,29 +45,69 @@ def header():
 		print('-',end="")
 	ui_design.reset()
 #--------------------------------------------------------------------------
-def menu():
+def launch():
 	os.system("clear")
+	ui_design.color(3)
+	print("Welcome to the container launch window!!")
+	print("-----------------------------------------")
+	ui_design.reset()
+	print("Enter the name of the container you want to launch:")
+	name=input()
+	print("Enter the name of the os image:")
+	osimage=input()
+	inp="docker run -it --name "
+	inp+=name
+	inp+=" " +osimage
+	os.system(inp)
+	print("Want to launch another container?(y/n)")
+	if(input()=="y"):
+		launch()
+	else:
+		docker_main()
+#--------------------------------------------------------------------------
+def show_running():
+	ui_design.color(3)
+	print("Here you can see the running containers")
+	print("----------------------------------------")
+	ui_design.reset()
+	os.system("docker container ls --all")
+	time.sleep(6)
+	docker_menu()
+#--------------------------------------------------------------------------
+def images_list():
+	ui_design.color(3)
+	print("Here you can see the running containers")
+	print("----------------------------------------")
+	ui_design.reset()
+	os.system("docker images ls --all")
+	time.sleep(6)
+#--------------------------------------------------------------------------
+def docker_menu():
+	os.system("clear")
+	ui_design.color(3)
 	print("Here's what you can do:")
+	ui_design.reset()
+	print()
 	print("1)Start a container")
 	print("2)Show the list of running containers")
 	print("3)Show the available images")
 	print("4)Show configuration")
-	print("5)Return back to the main menu")
+	print("5)Return to the main menu?")
 #--------------------------------------------------------------------------
-if __name__=="__main__":
+def docker_main():
 	requirement()
 	time.sleep(0.8)
 	os.system("clear")
 	while(True):
-		menu()
+		docker_menu()
 		ch=int(input())
 		if(ch==1):
 			launch()
 		elif(ch==2):
-			containerlist()
+			show_running()
 		elif(ch==3):
-			imageslist()
+			images_list()
 		elif(ch==4):
 			configuration()
 		else:
-			sample.main()
+			import menu
